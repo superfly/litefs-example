@@ -1,8 +1,21 @@
 Deploy LiteFS on Fly.io
 =======================
 
-This repository provides a basic starting point for deploying LiteFS. To run it,
-simply run the following commands:
+This repository provides a basic starting point for deploying LiteFS.
+
+
+## Usage
+
+### Deployment
+
+First, create a `fly.toml` with the following contents:
+
+```yml
+[experimental]
+  enable_consul = true
+```
+
+Next, launch a new application:
 
 ```sh
 fly launch
@@ -10,6 +23,9 @@ fly launch
 
 Choose "Y" when it asks to use the existing `fly.toml`. Choose an application
 name and a region and then watch it deploy.
+
+
+### Using SQLite
 
 Once deployed, you can log in using:
 

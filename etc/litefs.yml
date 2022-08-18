@@ -6,5 +6,7 @@ http:
 
 consul:
   url: "${FLY_CONSUL_URL}"
-  advertise-url: "http://${FLY_ALLOC_ID}.vm.${FLY_APP_NAME}.internal:20202"
+  advertise-url: "http://${HOSTNAME}:20202"
   key: "litefs/primary"
+  ttl: 10s
+  lock-delay: 1s

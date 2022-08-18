@@ -7,3 +7,4 @@ http:
 consul:
   url: "${FLY_CONSUL_URL}"
   advertise-url: "http://${FLY_ALLOC_ID}.vm.${FLY_APP_NAME}.internal:20202"
+  key: "litefs/primary"

@@ -17,3 +17,10 @@ Once deployed, you can log in using:
 fly ssh console
 ```
 
+Inside the Firecracker VM, you can execute SQLite commands against the
+LiteFS mounted file system at `/data`:
+
+```sh
+sqlite3 /data/db
+sqlite3> CREATE TABLE widgets (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT);
+```

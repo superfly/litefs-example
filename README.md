@@ -97,3 +97,22 @@ your other regions almost immediately. The replication time is mostly dependent
 on the speed of light so you may see delays of around 250ms if the data needs to
 travel half way around the world.
 
+
+### Safety & Persistence
+
+By default, Fly.io runs ephemeral instances which means that all data is deleted
+when the instance is shutdown. Since we have multiple instances running and
+replicating, data is automatically copied between nodes during a rolling restart
+so it appears that our cluster has persistence.
+
+However, in the event that all nodes shutdown at the same time, the database
+would be lost. That's no good.
+
+To protect against this, you're encouraged to use volumes. This allows nodes to
+retain their data between restarts. Please see the [Volumes](https://fly.io/docs/reference/volumes/)
+documentation for more information.
+
+Additionally, you'll need to set the `data-dir` in the `litefs.yml` configuration
+file to point to your mount directory for your volume.
+
+

@@ -75,6 +75,13 @@ var indexTmplContent string
 var indexTmpl = template.Must(template.New("index").Parse(indexTmplContent))
 
 func handleIndex(w http.ResponseWriter, r *http.Request) {
+	// If a different region is specified, redirect to that region.
+	if region := r.URL.Query().Get("region"); region != "" && region != os.Getenv("FLY_REGION") {
+		log.Printf("redirecting from %q to %q", os.Getenv("FLY_REGION"), region)
+		w.Header().Set("fly-replay", "region="+region)
+		return
+	}
+
 	// Query for the most recently added people.
 	rows, err := db.Query(`
 		SELECT id, name, phone, company
@@ -103,13 +110,24 @@ func handleIndex(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// Render the list to HTML.
-	if err := indexTmpl.ExecuteTemplate(w, "index", TemplateData{
+	// Render the list to either text or HTML.
+	tmplData := TemplateData{
 		Region:  os.Getenv("FLY_REGION"),
 		Persons: persons,
-	}); err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
+	}
+
+	switch r.Header.Get("accept") {
+	case "text/plain":
+		fmt.Fprintf(w, "REGION: %s\n\n", tmplData.Region)
+		for _, person := range tmplData.Persons {
+			fmt.Fprintf(w, "- %s @ %s (%s)\n", person.Name, person.Company, person.Phone)
+		}
+
+	default:
+		if err := indexTmpl.ExecuteTemplate(w, "index", tmplData); err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
 	}
 }
 
@@ -128,6 +146,7 @@ func handleGenerate(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	if string(primary) != "" {
+		log.Printf("redirecting to primary instance: %q", string(primary))
 		w.Header().Set("fly-replay", "instance="+string(primary))
 		return
 	}
@@ -144,7 +163,7 @@ func handleGenerate(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Redirect back to the index page to view the new result.
-	http.Redirect(w, r, "/", http.StatusFound)
+	http.Redirect(w, r, r.Referer(), http.StatusFound)
 }
 
 type TemplateData struct {

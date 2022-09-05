@@ -1,12 +1,6 @@
 mount-dir: "/data"
-debug: false
-
-http:
-  addr: ":20202"
+exec: "myapp -dsn /data/db"
 
 consul:
   url: "${FLY_CONSUL_URL}"
-  advertise-url: "http://${HOSTNAME}:20202"
-  key: "litefs/primary"
-  ttl: 10s
-  lock-delay: 1s
+  advertise-url: "http://${HOSTNAME}.vm.${FLY_APP_NAME}.internal:20202"

@@ -13,6 +13,19 @@ First, create a `fly.toml` with the following contents:
 ```yml
 [experimental]
   enable_consul = true
+
+[[services]]
+  internal_port = 8080
+  protocol = "tcp"
+
+  [[services.ports]]
+    handlers = ["http"]
+    port = 80
+    force_https = true
+
+  [[services.ports]]
+    handlers = ["tls", "http"]
+    port = "443"
 ```
 
 Next, launch a new application:
@@ -25,18 +38,11 @@ Choose "Y" when it asks to use the existing `fly.toml`. Choose an application
 name and a region and then watch it deploy.
 
 
-### Using SQLite
+### Using the application
 
-Once deployed, you can log in using:
+Once you have your application deployed, open a browser using your app's URL:
 
-```sh
-fly ssh console
+```
+https://${APPNAME}.fly.dev/
 ```
 
-Inside the Firecracker VM, you can execute SQLite commands against the
-LiteFS mounted file system at `/data`:
-
-```sh
-sqlite3 /data/db
-sqlite3> CREATE TABLE widgets (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT);
-```

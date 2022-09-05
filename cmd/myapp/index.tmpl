@@ -1,0 +1,47 @@
+<html>
+<head>
+	<title>LiteFS Example</title>
+</head>
+
+<body>
+
+<h1>LiteFS Example App</h1>
+
+<form method="POST" action="/generate">
+	<input type="submit" value="Generate Record"/>
+</form>
+
+<h2>Recently added records</h2>
+
+{{ if .Persons }}
+	<table>
+		<tr>
+			<th>ID</th>
+			<th>Name</th>
+			<th>Company</th>
+			<th>Phone</th>
+		</tr>
+		
+		{{ range .Persons }}
+			<tr>
+				<td>{{ .ID }}</td>
+				<td>{{ .Name }}</td>
+				<td>{{ .Company }}</td>
+				<td>{{ .Phone }}</td>
+			</tr>
+		{{ end }}
+	</table>
+{{ else }}
+	<p>
+		<strong>No data yet, try generating a new row.</strong>
+	</p>
+{{ end }}
+
+<br/>
+<p>
+	<em>Region: {{ .Region }}</em>
+</p>
+
+
+</body>
+</html>

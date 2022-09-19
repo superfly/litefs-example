@@ -1,5 +1,5 @@
 # Fetch the LiteFS binary using a multi-stage build.
-FROM flyio/litefs:pr-94 AS litefs
+FROM flyio/litefs:pr-109 AS litefs
 
 
 # Build our application using a Go builder.
@@ -22,8 +22,8 @@ ADD etc/litefs.yml /etc/litefs.yml
 # Setup our environment to include FUSE & SQLite.
 RUN apk add bash curl fuse sqlite
 
-# Ensure our data directory exists before mounting with LiteFS.
-RUN mkdir -p /data
+# Ensure our mount & data directories exists before mounting with LiteFS.
+RUN mkdir -p /data /mnt/data
 
 # Run LiteFS as the entrypoint so it can execute "litefs-example" as a subprocess.
 ENTRYPOINT "litefs"

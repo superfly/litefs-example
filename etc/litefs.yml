@@ -1,6 +1,9 @@
 # The path to where the SQLite database will be accessed.
 mount-dir: "/data"
 
+# The path to where the underlying volume mount is.
+data-dir: "/mnt/data"
+
 # Execute this subprocess once LiteFS connects to the cluster. 
 exec: "litefs-example -dsn /data/db"
 

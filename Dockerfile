@@ -1,7 +1,3 @@
-# Fetch the LiteFS binary using a multi-stage build.
-FROM flyio/litefs:0.2 AS litefs
-
-
 # Build our application using a Go builder.
 FROM golang:1.19 AS builder
 WORKDIR /src/litefs-example
@@ -13,17 +9,18 @@ RUN go build -ldflags "-s -w -extldflags '-static'" -tags osusergo,netgo -o /usr
 FROM alpine
 
 # Copy binaries from the previous build stages.
+COPY --from=flyio/litefs:0.3 /usr/local/bin/litefs /usr/local/bin/litefs
 COPY --from=builder /usr/local/bin/litefs-example /usr/local/bin/litefs-example
-COPY --from=litefs /usr/local/bin/litefs /usr/local/bin/litefs
 
 # Copy our LiteFS configuration.
 ADD etc/litefs.yml /etc/litefs.yml
 
-# Setup our environment to include FUSE & SQLite.
-RUN apk add bash curl fuse sqlite
+# Setup our environment to include FUSE & SQLite. We install ca-certificates
+# so we can communicate with the Consul server over HTTPS. cURL is added so
+# we can call our HTTP endpoints for debugging.
+RUN apk add bash fuse sqlite ca-certificates curl
 
-# Ensure our mount & data directories exists before mounting with LiteFS.
-RUN mkdir -p /data /mnt/data
-
-# Run LiteFS as the entrypoint so it can execute "litefs-example" as a subprocess.
-ENTRYPOINT "litefs"
+# Run LiteFS as the entrypoint. Anything after the double-dash is run as a
+# subprocess by LiteFS. This allows the file system to mount and initialize
+# before the application starts.
+ENTRYPOINT litefs mount -- litefs-example -dsn /litefs/db

@@ -16,6 +16,15 @@ data:
 # than continually restarting on initialization failure.
 exit-on-error: false
 
+# This section defines settings for the option HTTP proxy.
+# This proxy can handle primary forwarding & replica consistency
+# for applications that use a single SQLite database.
+proxy:
+  addr: ":8080"
+  target: "localhost:8081"
+  db: "db"
+  debug: true
+
 # The lease section specifies how the cluster will be managed. We're using the
 # "consul" lease type so that our application can dynamically change the primary.
 #
@@ -24,6 +33,7 @@ exit-on-error: false
 lease:
   type: "consul"
   advertise-url: "http://${HOSTNAME}.vm.${FLY_APP_NAME}.internal:20202"
+  candidate: ${FLY_REGION == "syd"}
 
   consul:
     url: "${FLY_CONSUL_URL}"

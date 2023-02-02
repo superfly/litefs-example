@@ -11,7 +11,6 @@ import (
 	"math/rand"
 	"net/http"
 	"os"
-	"path/filepath"
 	"time"
 
 	"github.com/brianvoe/gofakeit/v6"
@@ -138,18 +137,20 @@ func handleGenerate(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// If this node is not primary, look up and redirect to the current primary.
-	primaryFilename := filepath.Join(filepath.Dir(*dsn), ".primary")
-	primary, err := os.ReadFile(primaryFilename)
-	if err != nil && !os.IsNotExist(err) {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
-	if string(primary) != "" {
-		log.Printf("redirecting to primary instance: %q", string(primary))
-		w.Header().Set("fly-replay", "instance="+string(primary))
-		return
-	}
+	/*
+		// If this node is not primary, look up and redirect to the current primary.
+		primaryFilename := filepath.Join(filepath.Dir(*dsn), ".primary")
+		primary, err := os.ReadFile(primaryFilename)
+		if err != nil && !os.IsNotExist(err) {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+		if string(primary) != "" {
+			log.Printf("redirecting to primary instance: %q", string(primary))
+			w.Header().Set("fly-replay", "instance="+string(primary))
+			return
+		}
+	*/
 
 	// If this is the primary, attempt to write a record to the database.
 	person := Person{

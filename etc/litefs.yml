@@ -24,6 +24,9 @@ proxy:
   target: "localhost:8081"
   db: "db"
   debug: true
+  passthrough: 
+    - "*.ico"
+    - "*.png"
 
 # The lease section specifies how the cluster will be managed. We're using the
 # "consul" lease type so that our application can dynamically change the primary.

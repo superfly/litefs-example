@@ -2,7 +2,7 @@
 FROM golang:1.19 AS builder
 WORKDIR /src/litefs-example
 COPY . .
-RUN go build -ldflags "-s -w -extldflags '-static'" -tags osusergo,netgo -o /usr/local/bin/litefs-example ./cmd/litefs-example
+RUN go build -buildvcs=false -ldflags "-s -w -extldflags '-static'" -tags osusergo,netgo -o /usr/local/bin/litefs-example ./cmd/litefs-example
 
 
 # Our final Docker image stage starts here.

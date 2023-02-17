@@ -9,7 +9,7 @@ RUN go build -ldflags "-s -w -extldflags '-static'" -tags osusergo,netgo -o /usr
 FROM alpine
 
 # Copy binaries from the previous build stages.
-COPY --from=flyio/litefs:pr-278 /usr/local/bin/litefs /usr/local/bin/litefs
+COPY --from=flyio/litefs:pr-279 /usr/local/bin/litefs /usr/local/bin/litefs
 COPY --from=builder /usr/local/bin/litefs-example /usr/local/bin/litefs-example
 
 # Copy our LiteFS configuration.

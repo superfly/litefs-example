@@ -5,8 +5,10 @@ This repository is an example of a toy application running on LiteFS on Fly.io.
 
 ## Prerequisites
 
-First, you'll need to install [`flyctl`](/docs/hands-on/install-flyctl/) and
-then [sign up for a free account](https://fly.io/docs/hands-on/sign-up/).
+First, you'll need to install [`flyctl`][] and then [sign up for a free account][signup].
+
+[`flyctl`]: https://fly.io/docs/hands-on/install-flyctl/
+[signup]: https://fly.io/docs/hands-on/sign-up/
 
 
 ## Usage
@@ -42,6 +44,14 @@ And add a mount to this volume in your `fly.toml` file:
   destination = "/var/lib/litefs"
 ```
 
+### Setting up Consul
+
+LiteFS uses [Consul](https://consul.io) for its distributed lease. You can find
+instructions for using Fly.io's free multi-tenant Consul in the
+[Lease Management][] section of the Getting Started guide.
+
+[Lease Management]: https://fly.io/docs/litefs/getting-started/#lease-configuration
+
 
 ### Launching your app
 
@@ -64,3 +74,23 @@ running LiteFS will automatically get those updates and apply them to their
 local copy of the database. That lets every node keep an exact copy of the same
 database.
 
+
+### Launching more regions
+
+This example application is configured to run as a primary only in the
+`PRIMARY_REGION` (which is Chicago). It's best practice to run two or more
+instances in the primary region and then you can add instances in additional
+regions to reduce latency for your users.
+
+You can clone the configuration of the machine to other regions by using the
+`fly m clone` command. The `--select` flag lets you choose from a list of
+existing machines to clone.
+
+```sh
+# Make a second instance in your primary region.
+fly m clone --select --region ord
+
+# Make additional instances in regions around the world (London, Sydney, etc).
+fly m clone --select --region lhr
+fly m clone --select --region syd
+```

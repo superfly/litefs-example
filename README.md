@@ -1,2 +1,4 @@
-This is a companion repository to the [LiteFS Example Application](https://fly.io/docs/litefs/example) guide.
+LiteFS Example Application
+==========================
 
+This repository is an example of a toy application running on LiteFS on Fly.io.

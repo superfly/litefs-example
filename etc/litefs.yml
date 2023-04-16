@@ -28,6 +28,13 @@ proxy:
     - "*.ico"
     - "*.png"
 
+# This section defines a list of commands to run after LiteFS has connected
+# and sync'd with the cluster. You can run multiple commands but LiteFS expects
+# the last command to be long-running (e.g. an application server). When the
+# last command exits, LiteFS is shut down.
+exec:
+  - cmd: "litefs-example -addr :8081 -dsn /litefs/db"
+
 # The lease section specifies how the cluster will be managed. We're using the
 # "consul" lease type so that our application can dynamically change the primary.
 #
@@ -36,7 +43,7 @@ proxy:
 lease:
   type: "consul"
   advertise-url: "http://${HOSTNAME}.vm.${FLY_APP_NAME}.internal:20202"
-  candidate: ${FLY_REGION == "syd"}
+  candidate: ${FLY_REGION == "ord"}
 
   consul:
     url: "${FLY_CONSUL_URL}"

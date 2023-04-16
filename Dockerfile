@@ -9,7 +9,7 @@ RUN go build -buildvcs=false -ldflags "-s -w -extldflags '-static'" -tags osuser
 FROM alpine
 
 # Copy binaries from the previous build stages.
-COPY --from=flyio/litefs:pr-279 /usr/local/bin/litefs /usr/local/bin/litefs
+COPY --from=flyio/litefs:0.4 /usr/local/bin/litefs /usr/local/bin/litefs
 COPY --from=builder /usr/local/bin/litefs-example /usr/local/bin/litefs-example
 
 # Copy our LiteFS configuration.
@@ -20,7 +20,6 @@ ADD etc/litefs.yml /etc/litefs.yml
 # we can call our HTTP endpoints for debugging.
 RUN apk add bash fuse3 sqlite ca-certificates curl
 
-# Run LiteFS as the entrypoint. Anything after the double-dash is run as a
-# subprocess by LiteFS. This allows the file system to mount and initialize
-# before the application starts.
-ENTRYPOINT litefs mount -- litefs-example -addr :8081 -dsn /litefs/db
+# Run LiteFS as the entrypoint. After it has connected and sync'd with the
+# cluster, it will run the commands listed in the "exec" field of the config.
+ENTRYPOINT litefs mount

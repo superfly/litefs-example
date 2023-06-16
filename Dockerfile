@@ -13,7 +13,7 @@ COPY --from=flyio/litefs:0.4 /usr/local/bin/litefs /usr/local/bin/litefs
 COPY --from=builder /usr/local/bin/litefs-example /usr/local/bin/litefs-example
 
 # Copy our LiteFS configuration.
-ADD etc/litefs.yml /etc/litefs.yml
+ADD fly-io-config/etc/litefs.yml /etc/litefs.yml
 
 # Setup our environment to include FUSE & SQLite. We install ca-certificates
 # so we can communicate with the Consul server over HTTPS. cURL is added so

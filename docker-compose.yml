@@ -1,0 +1,27 @@
+version: '3'
+services:
+  nginx:
+    build:
+      context: ./docker-config/nginx
+    ports:
+      - "8080:80"
+  primary:
+    build:
+      context: .
+      args:
+        - "LITEFS_CONFIG=litefs.primary.yml"
+    ports:
+    - "8081:8081"
+    privileged: true
+    environment:
+      FLY_REGION: primary
+  replica1:
+    build:
+      context: .
+      args:
+        - "LITEFS_CONFIG=litefs.replica.yml"
+    ports:
+    - "8082:8081"
+    privileged: true
+    environment:
+      FLY_REGION: replica1

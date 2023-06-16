@@ -14,11 +14,15 @@ ARG LITEFS_CONFIG=litefs.yml
 COPY --from=flyio/litefs:0.4 /usr/local/bin/litefs /usr/local/bin/litefs
 COPY --from=builder /usr/local/bin/litefs-example /usr/local/bin/litefs-example
 
-# Copy our LiteFS configuration.
+# Copy the possible LiteFS configurations.
 ADD fly-io-config/etc/litefs.yml /tmp/litefs.yml
 ADD docker-config/etc/litefs.primary.yml /tmp/litefs.primary.yml
 ADD docker-config/etc/litefs.replica.yml /tmp/litefs.replica.yml
 
+# Move the appropriate LiteFS config file to /etc/ (this one will be
+# used by LiteFS). By default this is the config file used on Fly.io,
+# but it's set appropriately to other files for the docker setup in
+# docker-compose.yml
 RUN cp /tmp/$LITEFS_CONFIG /etc/litefs.yml
 
 # Setup our environment to include FUSE & SQLite. We install ca-certificates

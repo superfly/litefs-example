@@ -35,21 +35,5 @@ lease:
   # and false on the replicas.
   candidate: false
 
-# This section defines settings for the option HTTP proxy.
-# This proxy can handle primary forwarding & replica consistency
-# for applications that use a single SQLite database.
-proxy:
-  # Specifies the bind address of the proxy server.
-  addr: ":5002"
-
-  # The hostport of the target application. If blank, proxy is disabled.
-  target: "localhost:5000"
-
-  # The name of the database used for TXID tracking.
-  db: "app.db"
-
-  # If true, enables verbose logging of requests by the proxy.
-  debug: true
-
 exec:
   - cmd: "litefs-example -addr :8081 -dsn /litefs/db"

@@ -26,14 +26,10 @@ lease:
   # Should match HTTP port.
   advertise-url: "http://primary:20202"
 
-  # Sets the hostname that other nodes will use to reference this
-  # node. Automatically assigned based on hostname(1) if not set.
-  hostname: "replica1"
-
   # Specifies whether the node can become the primary. If using
   # "static" leasing, this should be set to true on the primary
   # and false on the replicas.
-  candidate: false
+  candidate: $IS_PRIMARY
 
 exec:
   - cmd: "litefs-example -addr :8081 -dsn /litefs/db"

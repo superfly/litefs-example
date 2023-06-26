@@ -16,8 +16,7 @@ COPY --from=builder /usr/local/bin/litefs-example /usr/local/bin/litefs-example
 
 # Copy the possible LiteFS configurations.
 ADD fly-io-config/etc/litefs.yml /tmp/litefs.yml
-ADD docker-config/etc/litefs.primary.yml /tmp/litefs.primary.yml
-ADD docker-config/etc/litefs.replica.yml /tmp/litefs.replica.yml
+ADD docker-config/etc/litefs.static-lease.yml /tmp/litefs.static-lease.yml
 
 # Move the appropriate LiteFS config file to /etc/ (this one will be
 # used by LiteFS). By default this is the config file used on Fly.io,

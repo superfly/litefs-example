@@ -1,0 +1,35 @@
+# note: there should be one template for this, which you can update as necessary.
+# note: had to leave the getting started guide and go to the lease management section bc not using fly
+# note: lease.hostname and lease.advertise-url are not clear
+# note: we should have an example docker-compose setup with everything working both with consul
+# and static leases
+# This directory is where your application will access the database.
+fuse:
+  dir: "/litefs"
+
+# This directory is where LiteFS will store internal data.
+# You must place this directory on a persistent volume.
+data:
+  dir: "/var/lib/litefs"
+
+# The lease section defines how LiteFS creates a cluster and
+# implements leader election. For dynamic clusters, use the
+# "consul". This allows the primary to change automatically when
+# the current primary goes down. For a simpler setup, use
+# "static" which assigns a single node to be the primary and does
+# not failover.
+lease:
+  # Required. Must be either "consul" or "static".
+  type: "static"
+
+  # Required. The URL for this node's LiteFS API.
+  # Should match HTTP port.
+  advertise-url: "http://primary:20202"
+
+  # Specifies whether the node can become the primary. If using
+  # "static" leasing, this should be set to true on the primary
+  # and false on the replicas.
+  candidate: $IS_PRIMARY
+
+exec:
+  - cmd: "litefs-example -addr :8081 -dsn /litefs/db"

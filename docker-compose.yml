@@ -1,0 +1,29 @@
+version: '3'
+services:
+  nginx:
+    build:
+      context: ./docker-config/nginx
+    ports:
+      - "8080:80"
+  primary:
+    build:
+      context: .
+      args:
+        - "LITEFS_CONFIG=litefs.static-lease.yml"
+    ports:
+    - "8081:8081"
+    privileged: true
+    environment:
+      FLY_REGION: primary
+      IS_PRIMARY: "true"
+  replica1:
+    build:
+      context: .
+      args:
+        - "LITEFS_CONFIG=litefs.static-lease.yml"
+    ports:
+    - "8082:8081"
+    privileged: true
+    environment:
+      FLY_REGION: replica1
+      IS_PRIMARY: "false"

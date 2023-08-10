@@ -11,7 +11,7 @@ FROM alpine
 ARG LITEFS_CONFIG=litefs.yml
 
 # Copy binaries from the previous build stages.
-COPY --from=flyio/litefs:0.4 /usr/local/bin/litefs /usr/local/bin/litefs
+COPY --from=flyio/litefs:0.5 /usr/local/bin/litefs /usr/local/bin/litefs
 COPY --from=builder /usr/local/bin/litefs-example /usr/local/bin/litefs-example
 
 # Copy the possible LiteFS configurations.

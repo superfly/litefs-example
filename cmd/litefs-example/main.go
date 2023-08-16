@@ -159,7 +159,7 @@ func handleGenerate(w http.ResponseWriter, r *http.Request) {
 		Company: gofakeit.Company(),
 	}
 	if _, err := db.ExecContext(r.Context(), `INSERT INTO persons (name, phone, company) VALUES (?, ?, ?)`, person.Name, person.Phone, person.Company); err != nil {
-		http.Error(w, "Method not alllowed", http.StatusMethodNotAllowed)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 

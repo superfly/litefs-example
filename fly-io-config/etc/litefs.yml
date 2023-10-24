@@ -11,7 +11,7 @@ fuse:
 data:
   dir: "/var/lib/litefs"
 
-# This flag ensure that LiteFS continues to run if there is an issue on starup.
+# This flag ensure that LiteFS continues to run if there is an issue on start up.
 # It makes it easy to ssh in and debug any issues you might be having rather
 # than continually restarting on initialization failure.
 exit-on-error: false
